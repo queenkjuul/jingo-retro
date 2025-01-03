@@ -10,38 +10,50 @@ include mixins/links
       meta(name="generator", content="jingo " + jingoVersion)
       meta(name="viewport", content="width=device-width, initial-scale=1")
       title= title
-      +asset("/vendor/bootstrap/css/bootstrap.min.css")
-      link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Condensed")
-      +asset("/css/style.css")
+      unless ua.includes("MSIE 4")
+        +asset("/vendor/bootstrap/css/bootstrap.min.css")
+      link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed")
       +asset("/css/ionicons.min.css")
       +asset("/css/shCoreDefault.css")
+      +asset("/css/style.css")
       block styles
       if hasCustomStyle()
         style.
           !{_style}
-    body
+    body(bgcolor="#EAE6D1")
       -var term_ph = (typeof term == "undefined" ? "" : term)
-      .navbar.navbar-inverse.navbar-fixed-top
+      .navbar.navbar-inverse
         .container-fluid
           .navbar-header
-            +anchor("/", appBrand).navbar-brand
+            font(size="32px")
+              +anchor("/", appBrand).navbar-brand
             if canSearch()
               form(action=`${proxyPath}/search`).navbar-form.search.navbar-left
                 .input-group.input-group-sm.search
                   input.form-control(type="text", value=term_ph, data-i-search-input="true",name="term",placeholder="Search the wiki")
                   span.input-group-btn
-                    button.btn.btn-primary(type="submit") Search
+                    input.btn.btn-primary(type="submit" value="Search")
             .navbar-right
               if isAnonymous()
                 p.user You're not&nbsp;
                   +anchor('/login?destination', 'logged in')#js--login(title='Access login page')
               else
-                p.user
-                  if hasGravatar()
-                    img(src=gravatar().url(user.email, {s:24}))
-                  b &nbsp;#{user.displayName}&nbsp;
-                  +anchor('/logout')(title='Become anonymous')
-                    i.icon.ion-power
+                if noscript || ua.includes("MSIE")
+                  p.user &nbsp;#{user.displayName}&nbsp;
+                    b &nbsp;
+                      +anchor('/logout', 'Log Out').logout
+                else
+                  p.user
+                    if hasGravatar()
+                      img(src=gravatar().url(user.email, {s:24}))
+                    b &nbsp;#{user.displayName}&nbsp;
+                    +anchor('/logout')(title='Log Out')
+                      i.icon.ion-power
+
+      if noscript
+        p(color="red", left="8px" margin-left="8px").warning
+          font(color="red") 
+            b() Greetings, time traveler! We've detected you're using a vintage browser, and thus have disabled JavaScript. All essential site features should continue to work without it, but you'll lose fancy features like page previews and syntax highlighting.
 
       .tools
         block tools
@@ -64,14 +76,15 @@ include mixins/links
             .col-md-8.with-footer
               .content !{_footer}
 
-      script(src=proxyPath + "/vendor/jquery.min.js")
-      +asset("/vendor/bootstrap/js/bootstrap.min.js")
-      +asset("/js/app.js")
-      script.
-        Jingo.init("#{proxyPath}");
-      block scripts
-      if hasCustomScript()
+      unless noscript
+        script(src=proxyPath + "/vendor/jquery.min.js")
+        +asset("/vendor/bootstrap/js/bootstrap.min.js")
+        +asset("/js/app.js")
         script.
-          !{_script}
+          Jingo.init("#{proxyPath}");
+        block scripts
+        if hasCustomScript()
+          script.
+            !{_script}
 - else
   block content

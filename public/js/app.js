@@ -1,5 +1,6 @@
 /* global jQuery */
-!(function (window, $, undefined) { // eslint-disable-line
+!(function (window, $, undefined) {
+  // eslint-disable-line
   var cheatsheetShown = false
 
   var $toolbar
@@ -7,12 +8,9 @@
   var proxyPath
 
   var Jingo = {
-
     init: function (setProxyPath) {
       proxyPath = setProxyPath
 
-      var navh = $('.navbar').height()
-      var $tools = $('.tools')
       var qs
       var hl = null
 
@@ -53,29 +51,10 @@
       }
 
       $('#js--login').attr('href', function () {
-        return $(this).attr('href').replace('destination', 'destination=' + encodeURIComponent(window.location.pathname))
+        return $(this)
+          .attr('href')
+          .replace('destination', 'destination=' + encodeURIComponent(window.location.pathname))
       })
-
-      $('.tools').height(navh)
-
-      if ($('.tools > ul > li').length > 0) {
-        var $pah = $('<li class="tools-handle">Tools</li>')
-        var pahTo
-        var bodyPadding = $('body').css('padding-top')
-        $pah.on('mouseover', function () {
-          $tools.animate({'margin-top': bodyPadding === '40px' ? '0' : '-20'})
-          $pah.slideUp()
-        })
-        $tools.on('mouseenter', function () {
-          clearTimeout(pahTo)
-        }).on('mouseleave', function () {
-          pahTo = setTimeout(function () {
-            $tools.animate({'margin-top': '-62'})
-            $pah.slideDown()
-          }, 500)
-        })
-        $('.tools > ul').append($pah)
-      }
 
       $('.confirm-delete-page').on('click', function (evt) {
         return window.confirm('Do you really want to delete this page?')
@@ -104,18 +83,34 @@
         if ($hCol1.find(':checked').length < 2) {
           return false
         }
-        window.location.href = proxyPath + '/wiki/' + $(this).data('pagename') + '/compare/' + $hCol1.find(':checked').map(function () { return $(this).val() }).toArray().reverse().join('..')
+        window.location.href =
+          proxyPath +
+          '/wiki/' +
+          $(this).data('pagename') +
+          '/compare/' +
+          $hCol1
+            .find(':checked')
+            .map(function () {
+              return $(this).val()
+            })
+            .toArray()
+            .reverse()
+            .join('..')
         return false
       })
 
-      if (/^\/pages\/.*\/edit/.test(window.location.pathname) ||
-          /^\/pages\/new/.test(window.location.pathname)) {
-        $('#js--editor').closest('form').on('submit', function () {
-          if (Jingo.cmInstance) {
-            Jingo.cmInstance.save()
-          }
-          window.sessionStorage.setItem('jingo-page', $('#js--editor').val())
-        })
+      if (
+        /^\/pages\/.*\/edit/.test(window.location.pathname) ||
+        /^\/pages\/new/.test(window.location.pathname)
+      ) {
+        $('#js--editor')
+          .closest('form')
+          .on('submit', function () {
+            if (Jingo.cmInstance) {
+              Jingo.cmInstance.save()
+            }
+            window.sessionStorage.setItem('jingo-page', $('#js--editor').val())
+          })
         if (window.location.search === '?e=1') {
           // Edit page in error: restore the body
           var content = window.sessionStorage.getItem('jingo-page')
@@ -131,7 +126,7 @@
         markMissingPagesAsAbsent('#js--content')
       }
 
-      function toggleCompareCheckboxes () {
+      function toggleCompareCheckboxes() {
         $('#js--rev-compare').attr('disabled', true)
 
         if ($hCol1.find(':checkbox').length === 1) {
@@ -140,25 +135,18 @@
         }
         if ($hCol1.find(':checked').length === 2) {
           $('#js--rev-compare').attr('disabled', false)
-          $hCol1.find(':not(:checked)')
-                .hide()
-          $hCol1.parent('tr')
-                .css({'color': 'silver'})
-          $hCol1.find(':checked')
-                .parents('tr')
-                .css({'color': 'black'})
+          $hCol1.find(':not(:checked)').hide()
+          $hCol1.parent('tr').css({ color: 'silver' })
+          $hCol1.find(':checked').parents('tr').css({ color: 'black' })
         } else {
-          $hCol1.find('input')
-                .show()
-                .parents('tr')
-                .css({'color': 'black'})
+          $hCol1.find('input').show().parents('tr').css({ color: 'black' })
         }
       }
     },
 
     preview: function () {
-      $('#js--preview').modal({keyboard: true, show: true, backdrop: false})
-      $.post(proxyPath + '/misc/preview', {data: $('#js--editor').val()}, function (data) {
+      $('#js--preview').modal({ keyboard: true, show: true, backdrop: false })
+      $.post(proxyPath + '/misc/preview', { data: $('#js--editor').val() }, function (data) {
         $('#js--preview .modal-body').html(data).get(0).scrollTop = 0
         markMissingPagesAsAbsent('#js--preview .modal-body')
       })
@@ -180,9 +168,13 @@
     toolbar: function () {
       $toolbar = $("<ul class='toolbar'>")
       /* eslint-disable */
-      $toolbar.append('<li title="Toggle fullscreen (Ctrl/Cmd+Enter)" class="fullscreen"><span></span></li>\
+      $toolbar
+        .append(
+          '<li title="Toggle fullscreen (Ctrl/Cmd+Enter)" class="fullscreen"><span></span></li>\
         <li title="Syntax help" class="info"><span></span></li>\
-        <li title="Preview" class="preview"><span></span></li></ul>').insertBefore($('form.edit textarea:first').closest('div'))
+        <li title="Preview" class="preview"><span></span></li></ul>'
+        )
+        .insertBefore($('form.edit textarea:first').closest('div'))
       /* eslint-enable */
 
       $('ul.toolbar').on('click', 'span', function () {
@@ -200,15 +192,15 @@
     },
 
     markdownSyntax: function () {
-      $('#js--syntax-reference').modal({keyboard: true, show: true, backdrop: false})
+      $('#js--syntax-reference').modal({ keyboard: true, show: true, backdrop: false })
       if (!cheatsheetShown) {
         $('#js--syntax-reference .modal-body').load(proxyPath + '/misc/syntax-reference')
         cheatsheetShown = true
       }
-    }
+    },
   }
 
-  function markMissingPagesAsAbsent (selector) {
+  function markMissingPagesAsAbsent(selector) {
     var pages = []
     var match
     var href
@@ -222,12 +214,19 @@
       }
     })
 
-    $.getJSON(proxyPath + '/misc/existence', {data: pages}, function (result) {
+    $.getJSON(proxyPath + '/misc/existence', { data: pages }, function (result) {
       $.each(result.data, function (href, a) {
-        $(selector + " a[href='" + proxyPath.split('/').join('\\/') + '\\/wiki\\/' + encodeURIComponent(a) + "']").addClass('absent')
+        $(
+          selector +
+            " a[href='" +
+            proxyPath.split('/').join('\\/') +
+            '\\/wiki\\/' +
+            encodeURIComponent(a) +
+            "']"
+        ).addClass('absent')
       })
     })
   }
 
   window.Jingo = Jingo
-}(this, jQuery))
+})(this, jQuery)

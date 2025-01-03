@@ -2,41 +2,49 @@ include links
 
 mixin tools(action, pageName)
   if action == 'edit'
-    ul
+    .tools-list
       if pageName != 'home'
-        li
+        span.tool-button
           form(action=`${proxyPath}/pages/${pageName}`, method="post", style="display:inline")
             input(type="hidden", name="_method", value="delete")
             input(type="submit", value="Delete this page").confirm-delete-page.btn.btn-default
 
   if action == 'show'
-    ul
+    .tools-list
       if !isAnonymous()
-        li
-          +anchor("/pages/new")(title="Create new page").btn.btn-sm.btn-default
+        span.tool-button
+          +anchor("/pages/new")(title="Create new page").btn.btn-default
             i.icon.ion-plus-round
+            span.tool-label Create new page
+            div(class= noscript ? ".tool-spacer" : ".hidden")
       if !isAnonymous() && canEdit
-        li
-          +anchor("/pages/" + pageName + "/edit")(title="Edit this page").btn.btn-sm.btn-default
+        span.tool-button
+          +anchor("/pages/" + pageName + "/edit")(title="Edit this page").btn.btn-default
             i.icon.ion-compose
-
-      li
-        +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-sm.btn-default
+            span.tool-label Edit this page
+            div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
+      span.tool-button
+        +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-default
           i.icon.ion-clock
-      li
-        +anchor("/wiki")(title="All pages").btn.btn-sm.btn-default
+          span.tool-label Page History
+          div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
+      span.tool-button
+        +anchor("/wiki")(title="All pages").btn.btn-default
           i.icon.ion-grid
-
+          span.tool-label All Pages
+          div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
       if canSearch()
-        li
-          +anchor("/search")(title="Search through the pages").btn.btn-sm.btn-default
+        span.tool-button
+          +anchor("/search")(title="Search through the pages").btn.btn-default
             i.icon.ion-search
+            span.tool-label Search
 
   if action == 'history'
-    ul
-      li
-        +anchor("/wiki")(title="All pages").btn.btn-sm.btn-default
+    div
+      span.tool-button
+        +anchor("/wiki")(title="All pages").btn.btn-default
           i.icon.ion-grid
+          span.tool-label All Pages
 
 mixin saveAndCancel(saveText)
   .well
@@ -59,23 +67,24 @@ mixin featuresStylesheets()
   +asset("/vendor/codemirror/fullscreen.css")(type="text/css")
 
 mixin featuresJavaScripts()
-  +asset("/vendor/codemirror/codemirror.min.js")
-  script.
-    Jingo.cmInstance = CodeMirror.fromTextArea(document.getElementById('js--editor'), {
-      lineNumbers: true,
-      mode: 'gfm',
-      matchBrackets: true,
-      lineWrapping: true,
-      extraKeys: {
-        'Ctrl-Enter': function(cm) {
-          Jingo.toggleFullscreen();
-        },
-        'Ctrl-S': function(cm) {
-          Jingo.save();
+  unless noscript
+    +asset("/vendor/codemirror/codemirror.min.js")
+    script.
+      Jingo.cmInstance = CodeMirror.fromTextArea(document.getElementById('js--editor'), {
+        lineNumbers: true,
+        mode: 'gfm',
+        matchBrackets: true,
+        lineWrapping: true,
+        extraKeys: {
+          'Ctrl-Enter': function(cm) {
+            Jingo.toggleFullscreen();
+          },
+          'Ctrl-S': function(cm) {
+            Jingo.save();
+          }
         }
-      }
-    });
-    Jingo.toolbar();
+      });
+      Jingo.toolbar();
 
 mixin warning()
   -var warning = locals.warning;

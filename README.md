@@ -2,9 +2,9 @@
 
 [ ![Codeship Status for claudioc/jingo](https://www.codeship.io/projects/4c413870-353e-0132-115c-220292a78f73/status)](https://www.codeship.io/projects/40997)
 
-# JINGO
+# JingoRetro
 
-A **git based** _wiki engine_ written for **node.js**, with a decent design, a search capability and a good typography.
+A **git based** _wiki engine_ written for **node.js**, with a decent design, and search capability, modified specifically to ensure compatibility with some of the absolute oldest browsers.
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024412/f0cb9206-37d0-11e7-9748-8101fc4e662f.png)
 

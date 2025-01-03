@@ -22,9 +22,10 @@ block content
         input(type="hidden", name="_method", value="put")
 
       .form-group
-        textarea.form-control(name="content", rows=25)#js--editor #{coalesce(formData.content, '')}
+        textarea.form-control(name="content", rows=25, cols=80 style="width: 100%;")#js--editor #{coalesce(formData.content, '')}
 
       .form-group
+        label(name="message") Commit Message
         input.form-control(type='text', name='message', placeholder='Write a small message here explaining this change (optional)')#message.span8
 
       +saveAndCancel()
