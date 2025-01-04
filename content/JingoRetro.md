@@ -1,3 +1,5 @@
+{{ TOC }}
+
 JingoRetro is a [fork of the Jingo wiki engine](https://github.org/claudioc/jingo) with some small changes to facilitate compatibility with Browsers Ancien such as Netscape Navigator 3 and Internet Explorer 4. The goal is to provide a dead simple self-hostable platform for hosting notes, documentation, and files, explicitly designed to be accessible from nearly any platform capable of reaching the web. My specific use case is to host a knowledge base of random retro computing information and files, with the thought that if I can update the wiki directly from the machines I'm testing on, it saves me time and effort having to work on the old machine and write up notes on something modern.
 
 ## Jingo
