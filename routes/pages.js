@@ -1,11 +1,11 @@
 /* global Git */
 
-var router = require('express').Router()
 var namer = require('../lib/namer')
 var app = require('../lib/app').getInstance()
 var models = require('../lib/models')
 var components = require('../lib/components')
-const { check } = require('express-validator')
+const { check, validationResult } = require('express-validator')
+const router = require('express-promise-router')()
 
 models.use(Git)
 
@@ -89,9 +89,9 @@ async function _postPages(req, res) {
   await check('pageTitle', 'The page title cannot be empty').notEmpty().run(req)
   await check('content', 'The page content cannot be empty').notEmpty().run(req)
 
-  errors = req.validationErrors()
+  errors = validationResult(req).errors
 
-  if (errors) {
+  if (errors.length > 0) {
     req.session.errors = errors
     // If the req.body is too big, the cookie session-store will crash,
     // logging out the user. For this reason we use the sessionStorage
@@ -104,8 +104,8 @@ async function _postPages(req, res) {
     return
   }
 
-  await sanitize('pageTitle').trim().run(req)
-  await sanitize('content').trim().run(req)
+  await check('pageTitle').trim().run(req)
+  await check('content').trim().run(req)
 
   if (page.exists()) {
     req.session.errors = [{ msg: 'A document with this title already exists' }]
@@ -144,9 +144,9 @@ async function _putPages(req, res) {
   await check('pageTitle', 'The page title cannot be empty').notEmpty().run(req)
   await check('content', 'The page content cannot be empty').notEmpty().run(req)
 
-  errors = req.validationErrors()
+  errors = validationResult(req).errors
 
-  if (errors) {
+  if (errors.length > 0) {
     fixErrors()
     return
   }
@@ -158,9 +158,9 @@ async function _putPages(req, res) {
     return
   }
 
-  await sanitize('pageTitle').trim().run(req)
-  await sanitize('content').trim().run(req)
-  await sanitize('message').trim().run(req)
+  await check('pageTitle').trim().run(req)
+  await check('content').trim().run(req)
+  await check('message').trim().run(req)
 
   page.author = req.user.asGitAuthor
 
