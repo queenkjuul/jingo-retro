@@ -73,7 +73,8 @@
     "sinon": "^19.0.2"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha test/spec",
+    "test": "mocha test/spec",
+    "mocha": "mocha",
     "start": "./jingo-retro -c config.yaml",
     "start-dev": "nodemon ./jingo-retro -c config.yaml"
   },

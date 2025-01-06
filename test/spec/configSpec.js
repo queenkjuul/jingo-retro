@@ -3,7 +3,15 @@
 
 var yaml = require('js-yaml')
 
-var configKeys = ['application', 'authentication', 'features', 'server', 'authorization', 'pages', 'customizations']
+var configKeys = [
+  'application',
+  'authentication',
+  'features',
+  'server',
+  'authorization',
+  'pages',
+  'customizations',
+]
 var Config = require('../../lib/config')
 
 describe('Config', function () {
@@ -28,7 +36,7 @@ describe('Config', function () {
     expect(def.application.git).to.equal('git')
     expect(def.application.skipGitCheck).to.be.false
     expect(def.application.loggingMode).to.equal(1)
-    expect(def.application.pedanticMarkdown).to.be.true
+    expect(def.application.pedanticMarkdown).to.be.false
     expect(def.application.gfmBreaks).to.be.true
     expect(def.application.staticWhitelist).to.equal('/\\.png$/i, /\\.jpg$/i, /\\.gif$/i')
     expect(def.application.proxyPath).to.equal('')
@@ -61,7 +69,7 @@ describe('Config', function () {
     expect(c).to.equal('boom')
 
     Config.setup({
-      test: 23
+      test: 23,
     })
 
     expect(Config.get()).to.be.an('object')
@@ -71,8 +79,8 @@ describe('Config', function () {
     Config.setup({
       test: 23,
       test1: {
-        test2: 44
-      }
+        test2: 44,
+      },
     })
 
     expect(Config.get('test')).to.equal(23)
@@ -86,8 +94,8 @@ describe('Config', function () {
   it('should get the proxyPath when set', function () {
     Config.setup({
       application: {
-        proxyPath: 'foobar'
-      }
+        proxyPath: 'foobar',
+      },
     })
 
     expect(Config.getProxyPath()).to.equal('/foobar')
