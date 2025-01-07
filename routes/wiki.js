@@ -2,7 +2,7 @@
 
 var router = require('express').Router()
 var renderer = require('../lib/renderer')
-var models = require('../lib/models')
+var models = require('../lib/models/models')
 var corsEnabler = require('../lib/cors-enabler')
 var app = require('../lib/app').getInstance()
 

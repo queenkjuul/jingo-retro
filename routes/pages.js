@@ -2,7 +2,7 @@
 
 var namer = require('../lib/namer')
 var app = require('../lib/app').getInstance()
-var models = require('../lib/models')
+var models = require('../lib/models/models')
 var components = require('../lib/components')
 const { check, validationResult } = require('express-validator')
 const router = require('express-promise-router')()

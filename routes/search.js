@@ -3,14 +3,14 @@
 var router = require('express').Router()
 var path = require('path')
 var corsEnabler = require('../lib/cors-enabler')
-var models = require('../lib/models')
+var models = require('../lib/models/models')
 
 models.use(Git)
 
 router.options('/search', corsEnabler)
 router.get('/search', corsEnabler, _getSearch)
 
-function _getSearch (req, res) {
+function _getSearch(req, res) {
   var record
 
   res.locals.matches = []
@@ -46,7 +46,7 @@ function _getSearch (req, res) {
           res.locals.matches.push({
             pageName: path.basename(record[0].replace(/\.md$/, '')),
             line: record[1] ? ', L' + record[1] : '',
-            text: record.slice(2).join('')
+            text: record.slice(2).join(''),
           })
         }
       })
@@ -55,9 +55,9 @@ function _getSearch (req, res) {
     })
   }
 
-  function renderResults () {
+  function renderResults() {
     res.render('search', {
-      title: 'Search results'
+      title: 'Search results',
     })
   }
 }

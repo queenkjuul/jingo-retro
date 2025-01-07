@@ -14,7 +14,7 @@ describe('Models', function () {
     Git._content = ''
   })
 
-  function getModel (name, revision) {
+  function getModel(name, revision) {
     return new models.Page(name, revision)
   }
 
@@ -81,9 +81,9 @@ describe('Models', function () {
           pages: {
             title: {
               fromFilename: false,
-              fromContent: true
-            }
-          }
+              fromContent: true,
+            },
+          },
         })
 
         m.title = 'The huge'
@@ -99,31 +99,30 @@ describe('Models', function () {
 
     describe('UrlFor method', function () {
       it('should generate the correct url for page actions when a proxypath is not set', function () {
-        var Page = models.Page
+        var Page = new models.Page('verguenza')
         var pname = 'verguenza'
 
-        expect(Page.urlFor(pname, 'show')).to.equal('/wiki/verguenza')
-        expect(Page.urlFor(pname, 'edit')).to.equal('/pages/verguenza/edit')
-        expect(Page.urlFor(pname, 'edit error')).to.equal('/pages/verguenza/edit?e=1')
-        expect(Page.urlFor(pname, 'edit put')).to.equal('/pages/verguenza')
-        expect(Page.urlFor(pname, 'history')).to.equal('/wiki/verguenza/history')
-        expect(Page.urlFor(pname, 'compare')).to.equal('/wiki/verguenza/compare')
-        expect(Page.urlFor(pname, 'new')).to.equal('/pages/new/verguenza')
-        expect(Page.urlFor(pname, 'new error')).to.equal('/pages/new/verguenza?e=1')
+        expect(Page.urlFor('show')).to.equal('/wiki/verguenza')
+        expect(Page.urlFor('edit')).to.equal('/pages/verguenza/edit')
+        expect(Page.urlFor('edit error')).to.equal('/pages/verguenza/edit?e=1')
+        expect(Page.urlFor('edit put')).to.equal('/pages/verguenza')
+        expect(Page.urlFor('history')).to.equal('/wiki/verguenza/history')
+        expect(Page.urlFor('compare')).to.equal('/wiki/verguenza/compare')
+        expect(Page.urlFor('new')).to.equal('/pages/new/verguenza')
+        expect(Page.urlFor('new error')).to.equal('/pages/new/verguenza?e=1')
       })
 
       it('should generate the correct url for page actions when a proxypath is set', function () {
-        var Page = models.Page
-        var pname = 'verguenza'
+        var Page = new models.Page('verguenza', '', '/bazinga')
 
-        expect(Page.urlFor(pname, 'show', '/bazinga')).to.equal('/bazinga/wiki/verguenza')
-        expect(Page.urlFor(pname, 'edit', '/bazinga')).to.equal('/bazinga/pages/verguenza/edit')
-        expect(Page.urlFor(pname, 'edit error', '/bazinga')).to.equal('/bazinga/pages/verguenza/edit?e=1')
-        expect(Page.urlFor(pname, 'edit put', '/bazinga')).to.equal('/bazinga/pages/verguenza')
-        expect(Page.urlFor(pname, 'history', '/bazinga')).to.equal('/bazinga/wiki/verguenza/history')
-        expect(Page.urlFor(pname, 'compare', '/bazinga')).to.equal('/bazinga/wiki/verguenza/compare')
-        expect(Page.urlFor(pname, 'new', '/bazinga')).to.equal('/bazinga/pages/new/verguenza')
-        expect(Page.urlFor(pname, 'new error', '/bazinga')).to.equal('/bazinga/pages/new/verguenza?e=1')
+        expect(Page.urlFor('show')).to.equal('/bazinga/wiki/verguenza')
+        expect(Page.urlFor('edit')).to.equal('/bazinga/pages/verguenza/edit')
+        expect(Page.urlFor('edit error')).to.equal('/bazinga/pages/verguenza/edit?e=1')
+        expect(Page.urlFor('edit put')).to.equal('/bazinga/pages/verguenza')
+        expect(Page.urlFor('history')).to.equal('/bazinga/wiki/verguenza/history')
+        expect(Page.urlFor('compare')).to.equal('/bazinga/wiki/verguenza/compare')
+        expect(Page.urlFor('new')).to.equal('/bazinga/pages/new/verguenza')
+        expect(Page.urlFor('new error')).to.equal('/bazinga/pages/new/verguenza?e=1')
       })
 
       it('should generate the correct url for page actions', function () {
@@ -144,8 +143,8 @@ describe('Models', function () {
 
         m.configOverride({
           application: {
-            proxyPath: 'lovely'
-          }
+            proxyPath: 'lovely',
+          },
         })
 
         expect(m.urlFor('show')).to.equal('/lovely/wiki/chupito')
@@ -165,8 +164,8 @@ describe('Models', function () {
 
         m.configOverride({
           pages: {
-            index: 'pisquanio'
-          }
+            index: 'pisquanio',
+          },
         })
 
         expect(m.isIndex()).to.be.true
@@ -194,14 +193,14 @@ describe('Models', function () {
         m = getModel('panchovilla')
 
         var l = m.lock({
-          asGitAuthor: 'geronimo@somewhere.com'
+          asGitAuthor: 'geronimo@somewhere.com',
         })
 
         expect(l).to.be.true
         expect(m.lockedBy.asGitAuthor).to.equal('geronimo@somewhere.com')
 
         l = m.lock({
-          asGitAuthor: 'someoneelse@somewhere.com'
+          asGitAuthor: 'someoneelse@somewhere.com',
         })
 
         expect(l).to.be.false
@@ -214,7 +213,7 @@ describe('Models', function () {
         m = getModel('panchovilla')
 
         m.lock({
-          asGitAuthor: 'geronimo@somewhere.com'
+          asGitAuthor: 'geronimo@somewhere.com',
         })
 
         m.unlock()
@@ -258,9 +257,9 @@ describe('Models', function () {
           pages: {
             title: {
               fromFilename: false,
-              fromContent: true
-            }
-          }
+              fromContent: true,
+            },
+          },
         })
 
         m.fetchContent().then(function () {
@@ -281,9 +280,9 @@ describe('Models', function () {
           pages: {
             title: {
               fromFilename: false,
-              fromContent: true
-            }
-          }
+              fromContent: true,
+            },
+          },
         })
 
         m.fetchContent().then(function () {

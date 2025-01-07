@@ -2,7 +2,7 @@
 var router = require('express').Router()
 var renderer = require('../lib/renderer')
 var fs = require('fs')
-var models = require('../lib/models')
+var models = require('../lib/models/models')
 
 models.use(Git)
 
@@ -10,19 +10,19 @@ router.get('/misc/syntax-reference', _getSyntaxReference)
 router.post('/misc/preview', _postPreview)
 router.get('/misc/existence', _getExistence)
 
-function _getSyntaxReference (req, res) {
+function _getSyntaxReference(req, res) {
   res.render('syntax')
 }
 
-function _postPreview (req, res) {
+function _postPreview(req, res) {
   res.render('preview', {
-    content: renderer.render(req.body.data)
+    content: renderer.render(req.body.data),
   })
 }
 
-function _getExistence (req, res) {
+function _getExistence(req, res) {
   if (!req.query.data) {
-    res.send(JSON.stringify({data: []}))
+    res.send(JSON.stringify({ data: [] }))
     return
   }
 
@@ -31,15 +31,15 @@ function _getExistence (req, res) {
   var n = req.query.data.length
 
   req.query.data.forEach(function (pageName, idx) {
-    (function (name, index) {
+    ;(function (name, index) {
       page = new models.Page(name)
       if (!fs.existsSync(page.pathname)) {
         result.push(name)
       }
-      if (index === (n - 1)) {
-        res.send(JSON.stringify({data: result}))
+      if (index === n - 1) {
+        res.send(JSON.stringify({ data: result }))
       }
-    }(pageName, idx))
+    })(pageName, idx)
   })
 }
 
