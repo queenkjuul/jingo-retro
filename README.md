@@ -1,14 +1,10 @@
-[![NPM](https://nodei.co/npm/jingo.png?compact=true)](https://npmjs.org/package/jingo)
+# Jinji
 
-[ ![Codeship Status for claudioc/jingo](https://www.codeship.io/projects/4c413870-353e-0132-115c-220292a78f73/status)](https://www.codeship.io/projects/40997)
+A **git based** _wiki engine_ written for **node.js**, forked from [Jingo](https://github.com/claudioc/jingo) (Jinji means Jinji Is Not Jingo). Jinji aims to provide a feature-complete wiki platform with truly universal compatibility, targeting Internet Explorer 4 as a baseline browser target.
 
-# JingoRetro
+Jinji does not follow previous Jingo defaults, and will not respect "legacy" Jingo configurations. This is best to use only with a brand new installation. References to older versions of Jingo in the code may be misleading, as some vestigial code may not yet have been removed, but is likely overridden elsewhere.
 
-A **git based** _wiki engine_ written for **node.js**, with a decent design, and search capability, modified specifically to ensure compatibility with some of the absolute oldest browsers.
-
-Does not follow previous Jingo defaults, and will not respect "legacy" Jingo configurations. This is best to use only with a brand new installation. References to older versions of Jingo in the code may be misleading, as some vestigial code may not yet have been removed, but is overridden elsewhere.
-
-All libraries have been updated to their latest versions, with requisite refactoring to account for breaking changes. Tests have been modified to reflect new behaviors, and all are passing.
+All libraries have been updated to their latest versions, with requisite refactoring to account for breaking changes. Tests have been modified to reflect new behaviors.
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024412/f0cb9206-37d0-11e7-9748-8101fc4e662f.png)
 
@@ -41,18 +37,18 @@ There is a demo server running at http://jingo.cica.li:6067/wiki/home
 
 ## Features
 
-- No database: Jingo uses a git repository as the document archive
+- No database: jinji uses a git repository as the document archive
 - Markdown for everything, [github flavored](http://github.github.com/github-flavored-markdown/)
-- Jingo uses [Codemirror](http://codemirror.net/) as the markup editor, with a nice (ajax) preview (see the `features` key in the config file)
-- It provides a "distraction free", almost full screen editing mode
+- Jinji uses [Codemirror](http://codemirror.net/) as the markup editor, with a nice (ajax) preview (but will work without it on legacy clients as well)
+- It provides a "distraction free", almost full screen editing mode (on modern clients)
 - Compatible with a wiki created with the [Gollum](https://github.com/github/gollum) wiki
 - Revision history for all the pages (with restore)
 - Show differences between document revisions
 - Paginated list of all the pages, with a quick way to find changes between revisions
 - Search through the content _and_ the page names
 - Page layout accepts custom sidebar and footer
-- Gravatar support
-- Can include IFRAMEs in the document (es: embed a Google Drive document)
+- ~~Gravatar support~~ _planned to be removed_
+- ~~Can include IFRAMEs in the document (es: embed a Google Drive document)~~ _insecure, disabled_
 - Generate Table of Contents for pages
 - Can use custom CSS and JavaScript scripts
 - White list for authorization on page reading and writing
@@ -64,11 +60,11 @@ There is a demo server running at http://jingo.cica.li:6067/wiki/home
 - Pages can be embedded into another site
 - Authentication via Google, Github, LDAP and local name/password
 
-For code syntax highlighting, Jingo uses the `node-syntaxhighlighter` module. For the list of supported languages, please refer to [this page](https://github.com/thlorenz/node-syntaxhighlighter/tree/master/lib/scripts).
+For code syntax highlighting, jinji uses the `node-syntaxhighlighter` module. For the list of supported languages, please refer to [this page](https://github.com/thlorenz/node-syntaxhighlighter/tree/master/lib/scripts).
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024414/f8470cb8-37d0-11e7-9c96-5193aca12591.png)
 
-## Installation
+## Installation **Not Currently Working with Jinji**
 
 `npm install -g jingo` or download/clone the whole thing and run `npm install`.
 
@@ -78,9 +74,9 @@ Jingo needs a config file and to create a sample config file, just run `jingo -s
 
 This document contains also [the reference](#configuration-options-reference) for all the possible options.
 
-If you define a `remote` to push to, then Jingo will automatically issue a push to that remote every `pushInterval` seconds. To declare a `remote` for Jingo to use, you'll need to identify the name of your local remote. The following example shows how a local remote is typically defined:
+If you define a `remote` to push to, then jinji will automatically issue a push to that remote every `pushInterval` seconds. To declare a `remote` for jinji to use, you'll need to identify the name of your local remote. The following example shows how a local remote is typically defined:
 
-`git remote add origin https://github.com/joeuser/jingorepo.git'`
+`git remote add origin https://github.com/joeuser/jinjirepo.git'`
 
 Based on that example, you would update config.yaml with the remote name "origin" as follows:
 
@@ -88,13 +84,13 @@ Based on that example, you would update config.yaml with the remote name "origin
 
 You can also use the `git remote` command to get the name of your remote.
 
-You can also specify a branch using the syntax "remotename branchname". If you don't specify a branch, Jingo will use `master`. Please note that before the `push`, a `pull` will also be issued (at the moment Jingo will not try to resolve conflicts, though).
+You can also specify a branch using the syntax "remotename branchname". If you don't specify a branch, jinji will use `main`. Please note that before the `push`, a `pull` will also be issued (at the moment Jinji will not try to resolve conflicts, though).
 
 The basic command to run the wiki will then be
 
-`jingo -c /path/to/config.yaml`
+`jinji -c /path/to/config.yaml`
 
-Before running jingo you need to initialise its git repository somewhere (`git init` is enough). Additionally the user running the process needs to have `git config --global user.name` and `git config --global user.email` configured. Else your document's repo will get scrambled and you have to reinitialize it again (`rm -rf .git && git init`).
+Before running jinji you need to initialise its git repository somewhere (`git init` is enough). Additionally the user running the process needs to have `git config --global user.name` and `git config --global user.email` configured. Else your document's repo will get scrambled and you have to reinitialize it again (`rm -rf .git && git init`).
 
 If you define a remote to push to, be sure that the user who'll push has the right to do so. This means you have to configure the remote via the `git://` URI that uses ssh authentication to push and have [created and published the process user's ssh public key](https://help.github.com/articles/generating-ssh-keys/) to the remote.
 
@@ -116,9 +112,9 @@ For Google, follow these instructions (you need to be logged in in Google):
 - Create a new project (you can leave the _Project id_ as it is). This will take a little while
 - Open the _Consent screen_ page and fill in the details (particularly, the _product name_)
 - Now open _APIs & auth_ => _Credentials_ and click on _Create new client id_
-- Here you need to specify the base URL of your jingo installation. Google will fill in automatically the other field
+- Here you need to specify the base URL of your jinji installation. Google will fill in automatically the other field
   with a `/oauth2callback` URL, which is fine
-- Now you need to copy the `Client ID` and `Client secret` in your jingo config file in the proper places
+- Now you need to copy the `Client ID` and `Client secret` in your jinji config file in the proper places
 
 For GitHub, follow these instructions (you need to be logged in in GitHub):
 
@@ -128,9 +124,9 @@ For GitHub, follow these instructions (you need to be logged in in GitHub):
 - Enter <your installation URL>/auth/github/callback as the `Authorization callback URL`
 - Press the `Register application` button
 - In the following page, on the top right corner, take note of the values for `Client ID` and `Client Secret`
-- Now you need to copy the `Client ID` and `Client secret` in your jingo config file in the proper places
+- Now you need to copy the `Client ID` and `Client secret` in your jinji config file in the proper places
 
-**Warning** In certain cases the Github authentication system return an empty email and Jingo is not happy about this. To avoid problems, when using Github set the `authorization.emptyEmailMatches` configuration option to `true`.
+**Warning** In certain cases the Github authentication system return an empty email and jinji is not happy about this. To avoid problems, when using Github set the `authorization.emptyEmailMatches` configuration option to `true`.
 
 The _ldap_ method uses `url` as the ldap server url, and optionally a `bindDn` and `bindCredentials` if needed. The `searchBase` and `searchFilter` are required for searching in the tree. In the configuration `searchAttributes` is also available.
 Since we want to install the (binary) support to LDAP only when needed, please _manually_ `npm install passport-ldapauth` to use the LDAP support.
@@ -145,7 +141,7 @@ If `anonRead` is true, then anyone who can access the wiki can read anything. If
 
 `emptyEmailMatches` allows access when remote authentication providers do not provide an email address as part of user data. It defaults to `false`, but will usually need to be set to `true` for GitHub authentication (GitHub only returns email addresses that have been made public on users' GitHub accounts).
 
-The authentication is mandatory to edit pages from the web interface, but jingo works on a git repository; that means that you could skip the authentication altogether and edit pages with your editor and push to the remote that jingo is serving.
+The authentication is mandatory to edit pages from the web interface, but jinji works on a git repository; that means that you could skip the authentication altogether and edit pages with your editor and push to the remote that jinji is serving.
 
 ## Known limitations
 
@@ -155,59 +151,59 @@ The authentication is mandatory to edit pages from the web interface, but jingo 
 - There is one authorization level only (no "administrators" and "editors")
 - No scheduled pull or fetch from the remote is provided (because handling conflicts would be a bit too... _interesting_)
 
-Please note that at the moment it is quite "risky" to have someone else, other than jingo itself, have write access to the remote / branch jingo is pushing to. The push operation is supposed to always be successfull and there is no pull or fetch. You can of course manage to handle pull requests yourself.
+Please note that at the moment it is quite "risky" to have someone else, other than jinji itself, have write access to the remote / branch jinji is pushing to. The push operation is supposed to always be successfull and there is no pull or fetch. You can of course manage to handle pull requests yourself.
 
 ## Customization
 
 _WARNING: These options are unlikely to work with legacy browsers_
 
-You can customize jingo in four different ways:
+You can customize jinji in four different ways:
 
-- add a left sidebar to every page: just add a file named `_sidebar.md` containing the markdown you want to display to the repository. You can edit or create the sidebar from Jingo itself, visiting `/wiki/_sidebar` (note that the title of the page in this case is useless)
+- add a left sidebar to every page: just add a file named `_sidebar.md` containing the markdown you want to display to the repository. You can edit or create the sidebar from jinji itself, visiting `/wiki/_sidebar` (note that the title of the page in this case is useless)
 - add a footer to every page: the page you need to create is `_footer.md` and the same rules for the sidebar apply
-- add a custom CSS file, included in every page as the last file. The default name of the file is `_style.css` and it must reside in the document directory (but can stay out of the repo). It is not possible to edit the file from jingo itself
-- add a custom JavaScript file, included in every page as the last JavaScript file. The default name of the file is `_script.js` and it must reside in the document directory (but can stay out of the repo). It is not possible to edit the file from jingo itself
+- add a custom CSS file, included in every page as the last file. The default name of the file is `_style.css` and it must reside in the document directory (but can stay out of the repo). It is not possible to edit the file from jinji itself
+- add a custom JavaScript file, included in every page as the last JavaScript file. The default name of the file is `_script.js` and it must reside in the document directory (but can stay out of the repo). It is not possible to edit the file from jinji itself
 
 All these names are customizable via the `customizations` option in the config file (see [the reference](#configuration-options-reference)).
 
 Once read, all those files are cached (thus, not re-read for every page load, but kept in memory). This means that for every modification in \_style.css and \_script.js you need to restart the server (sorry, working on that).
 
-This is not true for the footer and the sidebar but ONLY IF you edit those pages from jingo (which in that case will clear the cache by itself).
+This is not true for the footer and the sidebar but ONLY IF you edit those pages from jinji (which in that case will clear the cache by itself).
 
 ## Editing
 
-To link to another Jingo wiki page, use the Jingo Page Link Tag.
+To link to another jinji wiki page, use the jinji Page Link Tag.
 
-    [[Jingo Works]]
+    [[jinji Works]]
 
-The above tag will create a link to the corresponding page file named `jingo-works.md`. The conversion is as follows:
+The above tag will create a link to the corresponding page file named `jinji-works.md`. The conversion is as follows:
 
 1. Replace any spaces (U+0020) with dashes (U+002D)
 2. Replace any slashes (U+002F) with dashes (U+002D)
 
 If you'd like the link text to be something that doesn't map directly to the page name, you can specify the actual page name after a pipe:
 
-    [[How Jingo works|Jingo Works]]
+    [[How jinji works|jinji Works]]
 
-The above tag will link to `Jingo-Works.md` using "How Jingo works" as the link text.
+The above tag will link to `jinji-Works.md` using "How jinji works" as the link text.
 
 ## Images
 
-If you put images into the repository, Jingo will be able to serve them. You can enable Jingo to serve even other file types from the document directory: you need to change the `staticWhitelist` configuration option.
+If you put images into the repository, jinji will be able to serve them. You can enable jinji to serve even other file types from the document directory: you need to change the `staticWhitelist` configuration option.
 
 ## Configuration options reference
 
-#### application.title (string: "Jingo")
+#### application.title (string: "jinji")
 
 This will be showed on the upper left corner of all the pages, in the main toolbar
 
 #### application.logo (string: "")
 
-Supply the full URL to an image to be shown as the logo of your wiki. It will appear on the left of the page title in the navigation bar. Just set the `application.title` to an empty string to only show the Logo image. Please note that Jingo does not resize the image in any way (you can do it yourself using a custom CSS of course)
+Supply the full URL to an image to be shown as the logo of your wiki. It will appear on the left of the page title in the navigation bar. Just set the `application.title` to an empty string to only show the Logo image. Please note that jinji does not resize the image in any way (you can do it yourself using a custom CSS of course)
 
 #### application.favicon (string: "")
 
-Supply the full URL to an image to be shown as the favicon of your wiki. Please note that Jingo will try to get the mime type of the image from its extension (this can easily fail for a lot of reasons)
+Supply the full URL to an image to be shown as the favicon of your wiki. Please note that jinji will try to get the mime type of the image from its extension (this can easily fail for a lot of reasons)
 
 #### application.repository (string: "")
 
@@ -219,11 +215,11 @@ If your documents reside inside a directory of the repository, specify its name 
 
 #### application.remote (string: "")
 
-This is the name of the remote you want to push/pull to/from (optional). You can also specify a specific branch using the syntax “remotename branchname”. If you don’t specify a branch, Jingo will use master.
+This is the name of the remote you want to push/pull to/from (optional). You can also specify a specific branch using the syntax “remotename branchname”. If you don’t specify a branch, jinji will use master.
 
 #### application.pushInterval (integer: 30)
 
-Jingo will try to push to the remote (if present) every XX seconds
+jinji will try to push to the remote (if present) every XX seconds
 
 #### application.secret (string: "change me")
 
@@ -235,7 +231,7 @@ You can specify a different git binary, if you use more than one in your system
 
 #### application.skipGitCheck (boolean: false)
 
-Jingo will refuse to start if a version of git is found which is known to be problematic. You can still force it to start anyway, providing `true` as the value for this option
+jinji will refuse to start if a version of git is found which is known to be problematic. You can still force it to start anyway, providing `true` as the value for this option
 
 #### application.loggingMode (integer: 1)
 
@@ -247,7 +243,7 @@ Specifies how verbose the http logging should be. Accepts numeric values: `0` fo
 
 (the default was `true` in jingo 1.1.0 - 1.9.5)
 
-(the default is once again `false` in jingo-retro 2.0.0+)
+(the default is once again `false` in jinji 2.0.0+)
 
 ~~The markdown module we use (Marked) tries to overcome some "obscure" problems with the original Perl markdown parser by default. This produces some problems when rendering HTML embedded in a markdown document (see also issue https://github.com/claudioc/jingo/issues/48). By default we now want to use the original parser and not the modified one (pedantic: true).~~
 
@@ -259,15 +255,15 @@ Enable [GFM line breaks](https://help.github.com/articles/github-flavored-markdo
 
 #### application.proxyPath (string: "")
 
-If you want jingo to work "behind" another website (for example in a /wiki directory of an already existing intranet), you need to configure it to be aware of that situation so that it can write all the outbound URLs accordingly. Use this option to pass it the name of the directory that you've configured in your proxy_pass option in nginx or apache. See also an nginx example in the /etc directory of the jingo source distribution.
+If you want jinji to work "behind" another website (for example in a /wiki directory of an already existing intranet), you need to configure it to be aware of that situation so that it can write all the outbound URLs accordingly. Use this option to pass it the name of the directory that you've configured in your proxy_pass option in nginx or apache. See also an nginx example in the /etc directory of the jinji source distribution.
 
-Please note that jingo won't work correctly if this option is activated.
+Please note that jinji won't work correctly if this option is activated.
 
-#### application.allowHtml (boolean: true) New Behavior in jingo-retro 2.0.0
+#### application.allowHtml (boolean: true) New Behavior in jinji 2.0.0
 
 (behavior is changed from Jingo 1.9.0+, which itself was different than <1.9.0)
 
-Setting this option to `true` will generate a warning during Jingo startup.
+Setting this option to `true` will generate a warning during jinji startup.
 
 Marked.js no longer ships a built-in sanitizer. The old Marked.js sanitizer removed HTML before rendering the markdown, but Markdown spec explicitly allows inline HTML, so they removed this function to align with the spec.
 
@@ -296,7 +292,7 @@ Also note that Jingo session cookie is http only and cannot be read by JavaScrip
 
 #### authentication.staticWhitelist (string: "/\\.png$/i, /\\.jpg$/i, /\\.gif\$/i")
 
-This is to enable jingo to serve any kind of static file (like images) from the repository. By default, Jingo will serve `*.md` files and `*.jpg, *.png, *.gif`. Provide the values as a comma separated list of regular expressions.
+This is to enable jinji to serve any kind of static file (like images) from the repository. By default, jinji will serve `*.md` files and `*.jpg, *.png, *.gif`. Provide the values as a comma separated list of regular expressions.
 
 #### authentication.google.enabled (boolean: true)
 
@@ -353,7 +349,7 @@ Provide any username you like, as a string
 
 #### authentication.local.[accounts].passwordHash
 
-Use an hash of your password. Create the hash with `jingo -# yourpassword`
+Use an hash of your password. Create the hash with `jinji -# yourpassword`
 
 #### authentication.local.[accounts].email
 
@@ -371,7 +367,7 @@ _The Alone authentication option is deprecated in favor of the Local one_
 
 #### authentication.alone.passwordHash (deprecated)
 
-Use an hash of your password. Create the hash with `jingo -# yourpassword`
+Use an hash of your password. Create the hash with `jinji -# yourpassword`
 _The Alone authentication option is deprecated in favor of the Local one_
 
 #### authentication.alone.email (deprecated)
@@ -379,7 +375,7 @@ _The Alone authentication option is deprecated in favor of the Local one_
 If you want to use Gravatar, provide your gravatar email here.
 _The Alone authentication option is deprecated in favor of the Local one_
 
-#### features.markitup (boolean: false)
+#### ~~features.markitup (boolean: false)~~
 
 DEPRECATED: markitup support has been removed as of version 1.8.0
 
@@ -387,7 +383,7 @@ DEPRECATED: markitup support has been removed as of version 1.8.0
 
 Whether to enable Codemirror or not.
 
-#### features.gravatar (boolean: true)
+#### ~~features.gravatar (boolean: false)~~ _deprecated_
 
 Whether to enable gravatar support or not
 
@@ -397,15 +393,15 @@ This is the hostname used to build the URL for your wiki pages. The reason for t
 
 #### server.port
 
-Jingo will listen on this port
+jinji will listen on this port
 
 #### server.localOnly
 
 Set this to `true` if you want to accept connection only _from_ localhost (default false)
 
-#### server.CORS.enabled (boolean: false)
+#### server.CORS.enabled (boolean: false) **candidate for deprecation**
 
-Enable or disable CORS headers for accessing a page through an ajax call from an origin which is not the one which serves Jingo. Use this option if for example you want to embed a (rendered) page inside a page of another website.
+Enable or disable CORS headers for accessing a page through an ajax call from an origin which is not the one which serves jinji. Use this option if for example you want to embed a (rendered) page inside a page of another website.
 
 The configuration options for CORS are at the moment quite limited: via an Ajax call you can only read (GET) a wiki page (that is, the /wiki/NameOfYourPage path), or issue a search. Once you enable this option, all the wiki page will be accessible. Please note that no authentication check is made, which means that the Ajax calls will be denied if the `anonRead` configuration option will be `false` (all or nothing).
 
@@ -417,7 +413,7 @@ Set the allowed origin for your CORS headers. All the Ajax calls to the wiki pag
 
 #### server.baseUrl
 
-The baseUrl is usually automatically generated by Jingo (with "//" + hostname + ":" + port), but if for some reason you need to overrideit, you can use this option
+The baseUrl is usually automatically generated by jinji (with "//" + hostname + ":" + port), but if for some reason you need to overrideit, you can use this option
 
 #### authorization.anonRead (boolean: true)
 
@@ -437,7 +433,7 @@ Defines the page name for the index of the wiki
 
 #### pages.title.fromFilename (boolean: true)
 
-If this is true, the title of each page will be derived from the document's filename. This is how Gollum works and from Jingo 1.0 this is now the default. An important consequence of this behavior is that now Jingo is able _to rename_ documents (according to the new name it will be eventually given to), while previously it was impossible.
+If this is true, the title of each page will be derived from the document's filename. This is how Gollum works and from Jingo 1.0 this is now the default. An important consequence of this behavior is that now jinji is able _to rename_ documents (according to the new name it will be eventually given to), while previously it was impossible.
 
 #### pages.title.fromContent (boolean: false)
 
@@ -445,15 +441,17 @@ If this is true, the title of the document will be part of the document itself (
 
 #### pages.title.asciiOnly (boolean: false)
 
-If this is set to true, Jingo will convert any non-Ascii character present in the title of the document to an ASCII equivalent (using the transliteration module), when creating the filename of the document. Default was true for Jingo < 1.0 while for Jingo >= 1.0 the default is false
+If this is set to true, jinji will convert any non-Ascii character present in the title of the document to an ASCII equivalent (using the transliteration module), when creating the filename of the document. Default was true for Jingo < 1.0 while for Jingo >= 1.0 the default is false
 
 #### pages.title.lowercase (boolean: false)
 
-If this is set to true, Jingo will lowercase any character of the title when creating the filename. Default was true for Jingo < 1.0 while for Jingo >= 1.0 the default is false
+If this is set to true, jinji will lowercase any character of the title when creating the filename. Default was true for Jingo < 1.0 while for Jingo >= 1.0 the default is false
 
 #### pages.title.itemsPerPage (integer: 10)
 
 This defines how many page item to show in the "list all page" page. Keep this value as low as possible for performance reasons.
+
+#### The following are unlikely to be compatible with legacy clients
 
 #### customizations.sidebar (string: "\_sidebar.md")
 
