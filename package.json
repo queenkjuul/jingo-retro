@@ -1,5 +1,5 @@
 {
-  "name": "jingo-retro",
+  "name": "jinji",
   "version": "2.0.0-beta",
   "description": "A nodejs based wiki engine for retro systems",
   "author": "queenkjuul <queenkjuul@pm.me>, Claudio Cicali <claudio.cicali@gmail.com>",
@@ -23,13 +23,13 @@
       "chai"
     ]
   },
-  "main": "jingo-retro",
+  "main": "jinji",
   "bin": {
-    "jingo-retro": "./jingo-retro"
+    "jinji": "./jinji"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/claudioc/jingo"
+    "url": "https://github.com/queenkjuul/jinji"
   },
   "directories": {
     "lib": "./lib/"
@@ -44,6 +44,7 @@
     "ecstatic": "^4.1.4",
     "escape-html": "^1.0.3",
     "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
     "express-flash": "0.0.2",
     "express-promise-router": "^4.1.1",
     "express-session": "^1.18.1",
@@ -76,8 +77,8 @@
   "scripts": {
     "test": "mocha test/spec",
     "mocha": "mocha",
-    "start": "./jingo-retro -c config.yaml",
-    "start-dev": "nodemon ./jingo-retro -c config.yaml"
+    "start": "./jinji -c config.yaml",
+    "start-dev": "nodemon ./jinji -c config.yaml"
   },
   "engines": {
     "node": ">=0.8",
