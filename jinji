@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /*
- * Jingo, wiki engine
- * http://github.com/claudioc/jingo
+ * Jinji highly-compatible wiki engine
+ * https://github.com/queenkjuul/jinji
+ * forked from:
+ * https://github.com/claudioc/jingo
  *
+ * Copyright 2025 Julie Hill <queenkjuul@pm.me>
  * Copyright 2013-2017 Claudio Cicali <claudio.cicali@gmail.com>
  * Released under the MIT license
  */
@@ -93,7 +96,7 @@ function start() {
 
   http.createServer(app).listen(config.get('server').port, listenAddr, function () {
     console.log(
-      new Date() + ' - Jingo%sserver v%s listening on port %s',
+      new Date() + ' - Jinji%sserver v%s listening on port %s',
       config.get('server').localOnly ? ' (local) ' : ' ',
       program.version(),
       config.get('server').port

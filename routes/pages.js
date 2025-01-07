@@ -130,7 +130,7 @@ async function _postPages(req, res) {
       console.log(err)
       res.render('500.pug', {
         message:
-          'Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jingo, please file a detailed report about what you were doing here: https://github.com/claudioc/jingo/issues . Thank you!',
+          'Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jinji, please file a detailed report about what you were doing here: https://github.com/queenkjuul/jinji/issues . Thank you!',
         error: err,
       })
     })
@@ -214,7 +214,7 @@ async function _putPages(req, res) {
         console.log(err)
         res.render('500.pug', {
           message:
-            'Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jingo, please file a detailed report about what you were doing here: https://github.com/claudioc/jingo/issues . Thank you!',
+            'Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jinji, please file a detailed report about what you were doing here: https://github.com/queenkjuul/jinji/issues . Thank you!',
           error: err,
         })
       })
