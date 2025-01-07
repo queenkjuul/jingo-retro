@@ -14,9 +14,9 @@ describe('namer', function () {
       namer.configOverride({
         pages: {
           title: {
-            asciiOnly: true
-          }
-        }
+            asciiOnly: true,
+          },
+        },
       })
       expect(namer.getConfig().pages.title.asciiOnly).to.be.true
     })
@@ -36,7 +36,9 @@ describe('namer', function () {
       expect(namer.wikify('Caffé')).to.equal('Caffé')
       expect(namer.wikify('Caffé corretto!')).to.equal('Caffé-corretto!')
       expect(namer.wikify('Caff<p>e</p> senza schiuma')).to.equal('Caffpe+p-senza-schiuma')
-      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal('Per-favore:-nessun,-dico;-E-un-punto...')
+      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal(
+        'Per-favore:-nessun,-dico;-E-un-punto...'
+      )
       expect(namer.wikify('prova.md')).to.equal('prova.md')
     })
 
@@ -44,9 +46,9 @@ describe('namer', function () {
       namer.configOverride({
         pages: {
           title: {
-            asciiOnly: true
-          }
-        }
+            asciiOnly: true,
+          },
+        },
       })
 
       expect(namer.wikify('hello_Sidebar')).to.equal('hello_Sidebar')
@@ -55,7 +57,9 @@ describe('namer', function () {
       expect(namer.wikify('Caffé')).to.equal('Caffe')
       expect(namer.wikify('àéîöū')).to.equal('aeiou')
       expect(namer.wikify('Caffé corretto!')).to.equal('Caffe-corretto')
-      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal('Per-favore-nessun-dico-E-un-punto')
+      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal(
+        'Per-favore-nessun-dico-E-un-punto'
+      )
       expect(namer.wikify('prova.md')).to.equal('provamd')
     })
 
@@ -63,9 +67,9 @@ describe('namer', function () {
       namer.configOverride({
         pages: {
           title: {
-            lowercase: true
-          }
-        }
+            lowercase: true,
+          },
+        },
       })
       expect(namer.wikify('hello_sidebar')).to.equal('hello_sidebar')
       expect(namer.wikify('_sidebar')).to.equal('_sidebar')
@@ -89,9 +93,9 @@ describe('namer', function () {
           title: {
             asciiOnly: true,
             replaceWs: true,
-            lowercase: true
-          }
-        }
+            lowercase: true,
+          },
+        },
       })
       expect(namer.wikify('_Sidebar')).to.equal('_sidebar')
       expect(namer.wikify('_FOOTER')).to.equal('_footer')
@@ -103,7 +107,9 @@ describe('namer', function () {
       expect(namer.wikify('Caffé')).to.equal('caffe')
       expect(namer.wikify('Caffé corretto!')).to.equal('caffe-corretto')
       expect(namer.wikify('Caff<p>e</p> senza schiuma')).to.equal('caffpep-senza-schiuma')
-      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal('per-favore-nessun-dico-e-un-punto')
+      expect(namer.wikify('Per favore: nessun, dico; E un punto...')).to.equal(
+        'per-favore-nessun-dico-e-un-punto'
+      )
     })
   })
 
@@ -119,9 +125,9 @@ describe('namer', function () {
       namer.configOverride({
         pages: {
           title: {
-            lowercase: true
-          }
-        }
+            lowercase: true,
+          },
+        },
       })
 
       expect(namer.unwikify('34')).to.equal('34')
@@ -135,9 +141,9 @@ describe('namer', function () {
       namer.configOverride({
         pages: {
           title: {
-            replaceWs: true
-          }
-        }
+            replaceWs: true,
+          },
+        },
       })
 
       expect(namer.unwikify('34')).to.equal('34')

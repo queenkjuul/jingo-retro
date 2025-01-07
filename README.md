@@ -6,6 +6,10 @@
 
 A **git based** _wiki engine_ written for **node.js**, with a decent design, and search capability, modified specifically to ensure compatibility with some of the absolute oldest browsers.
 
+Does not follow previous Jingo defaults, and will not respect "legacy" Jingo configurations. This is best to use only with a brand new installation. References to older versions of Jingo in the code may be misleading, as some vestigial code may not yet have been removed, but is overridden elsewhere.
+
+All libraries have been updated to their latest versions, with requisite refactoring to account for breaking changes. Tests have been modified to reflect new behaviors, and all are passing.
+
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024412/f0cb9206-37d0-11e7-9748-8101fc4e662f.png)
 
 <!-- toc -->
@@ -39,7 +43,7 @@ There is a demo server running at http://jingo.cica.li:6067/wiki/home
 
 - No database: Jingo uses a git repository as the document archive
 - Markdown for everything, [github flavored](http://github.github.com/github-flavored-markdown/)
-- Jingo uses [Codemirror](http://codemirror.net/) or [Markitup](http://markitup.jaysalvat.com/home/) as the markup editor, with a nice (ajax) preview (see the `features` key in the config file)
+- Jingo uses [Codemirror](http://codemirror.net/) as the markup editor, with a nice (ajax) preview (see the `features` key in the config file)
 - It provides a "distraction free", almost full screen editing mode
 - Compatible with a wiki created with the [Gollum](https://github.com/github/gollum) wiki
 - Revision history for all the pages (with restore)
@@ -155,6 +159,8 @@ Please note that at the moment it is quite "risky" to have someone else, other t
 
 ## Customization
 
+_WARNING: These options are unlikely to work with legacy browsers_
+
 You can customize jingo in four different ways:
 
 - add a left sidebar to every page: just add a file named `_sidebar.md` containing the markdown you want to display to the repository. You can edit or create the sidebar from Jingo itself, visiting `/wiki/_sidebar` (note that the title of the page in this case is useless)
@@ -235,11 +241,15 @@ Jingo will refuse to start if a version of git is found which is known to be pro
 
 Specifies how verbose the http logging should be. Accepts numeric values: `0` for no logging at all, `1` for the a combined log and `2` for a coincise, coloured log (good for development)
 
-#### application.pedanticMarkdown (boolean: true)
+#### application.pedanticMarkdown (boolean: false)
 
 (the default was `false` in jingo < 1.1.0)
 
-The markdown module we use (Marked) tries to overcome some "obscure" problems with the original Perl markdown parser by default. This produces some problems when rendering HTML embedded in a markdown document (see also issue https://github.com/claudioc/jingo/issues/48). By default we now want to use the original parser and not the modified one (pedantic: true).
+(the default was `true` in jingo 1.1.0 - 1.9.5)
+
+(the default is once again `false` in jingo-retro 2.0.0+)
+
+~~The markdown module we use (Marked) tries to overcome some "obscure" problems with the original Perl markdown parser by default. This produces some problems when rendering HTML embedded in a markdown document (see also issue https://github.com/claudioc/jingo/issues/48). By default we now want to use the original parser and not the modified one (pedantic: true).~~
 
 With this option you can revert this decision if for some reason your documents are not rendered how you like.
 
@@ -253,11 +263,34 @@ If you want jingo to work "behind" another website (for example in a /wiki direc
 
 Please note that jingo won't work correctly if this option is activated.
 
-#### application.allowHtml (boolean: false) New since version 1.9.0
+#### application.allowHtml (boolean: true) New Behavior in jingo-retro 2.0.0
 
-Since version 1.9.0 Jingo sanitizes HTML by default, escaping it while rendering Markdown. Esplicitely enable html rendering again with the `allowHtml` option set to `true`. Remember that this will also enable, among all the other HTML elements, rendering of `<script>` though, so beware!
+(behavior is changed from Jingo 1.9.0+, which itself was different than <1.9.0)
 
 Setting this option to `true` will generate a warning during Jingo startup.
+
+Marked.js no longer ships a built-in sanitizer. The old Marked.js sanitizer removed HTML before rendering the markdown, but Markdown spec explicitly allows inline HTML, so they removed this function to align with the spec.
+
+Default behavior now, then, is to allow inline HTML, and sanitize the output with DOMPurify. This allows "safe" HTML to be used, while preventing malicious HTML from rendering. This generally works well, except a user inserting a `<script>` tag has the potential to break rendering the rest of the page, and is only as secure as DOMPurify (which, arguably, is pretty secure).
+
+If you set `allowHtml` to `false` instead, all HTML will be **escaped** _before_ the markdown is processed. This will result in the HTML elements being visible:
+
+```
+// markdown
+# Header
+- <a href="http://example.com" onclick="alert(1)">Home</a>
+```
+
+renders to:
+
+```html
+<h1>Header</h1>
+<li>&lt;a href="http://example.com" onclick="alert(1)"&gt;Home&lt;/a&gt;</li>
+```
+
+Setting `allowHtml: false` will also disable [URL Autolinks](https://github.github.com/gfm/#extended-url-autolink). It is still better to put HTML examples within code blocks. With allowHtml false, though, you essentially ensure no user HTML ends up in the output HTML, even if this results in some ugliness. Probably not necessary, but arguably more secure.
+
+~~Since version 1.9.0 Jingo sanitizes HTML by default, escaping it while rendering Markdown. Esplicitely enable html rendering again with the `allowHtml` option set to `true`. Remember that this will also enable, among all the other HTML elements, rendering of `<script>` though, so beware!~~
 
 Also note that Jingo session cookie is http only and cannot be read by JavaScript.
 
