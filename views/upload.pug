@@ -1,0 +1,18 @@
+extends layout
+
+include mixins/form
+include mixins/links
+
+block styles
+  +featuresStylesheets()
+
+block content
+  +errors()
+  h1 Upload File
+
+  form(action=`${proxyPath}/files`, method='post', encType="multipart/form-data")
+    input(type="file", name="file")
+    input(type="submit")
+
+block scripts
+  +featuresJavaScripts()
