@@ -6,13 +6,18 @@ include mixins/links
 block styles
   +featuresStylesheets()
 
-block content
-  +errors()
-  h1 Upload File
+block tools
+  +tools('file', path, path)
 
-  form(action=`${proxyPath}/files`, method='post', encType="multipart/form-data")
-    input(type="file", name="file")
-    input(type="submit")
+block content
+  #js--content.show
+    +errors()
+    h1 Upload File #{path && 'to /files' + path}
+
+    form(action=`${proxyPath}/upload${path || ''}`, method='post', encType="multipart/form-data")
+      input(type="file", name="file")
+      br
+      input(type="submit", value="Upload")
 
 block scripts
   +featuresJavaScripts()

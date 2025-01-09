@@ -1,6 +1,6 @@
 include links
 
-mixin tools(action, pageName)
+mixin tools(action, pageName, path)
   if action == 'edit'
     .tools-list
       if pageName != 'home'
@@ -9,7 +9,7 @@ mixin tools(action, pageName)
             input(type="hidden", name="_method", value="delete")
             input(type="submit", value="Delete this page").confirm-delete-page.btn.btn-default
 
-  if action == 'show'
+  if action == 'show' || action == 'file'
     .tools-list
       if !isAnonymous()
         span.tool-button
@@ -23,15 +23,27 @@ mixin tools(action, pageName)
             i.icon.ion-compose
             span.tool-label Edit this page
             div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
-      span.tool-button
-        +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-default
-          i.icon.ion-clock
-          span.tool-label Page History
-          div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
+      if action !== 'file'      
+        span.tool-button
+          +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-default
+            i.icon.ion-clock
+            span.tool-label Page History
+            div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
       span.tool-button
         +anchor("/wiki")(title="All pages").btn.btn-default
           i.icon.ion-grid
           span.tool-label All Pages
+          div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
+      if !isAnonymous()
+        span.tool-button
+          +anchor(`/upload${path || ''}`)(title="Upload File").btn.btn-default
+            i.icon.ion-plus-round
+            span.tool-label Upload File
+            div(class= noscript ? ".tool-spacer" : ".hidden")
+      span.tool-button
+        +anchor("/files")(title="Browse Files").btn.btn-default
+          i.icon.ion-grid
+          span.tool-label Browse Files
           div(width="8px", class= noscript ? ".tool-spacer" : ".hidden")
       if canSearch()
         span.tool-button
