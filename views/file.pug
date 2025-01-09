@@ -28,20 +28,22 @@ block content
         small
           |(#{file.metadata.relDate})
       li Commit: #{file.metadata.fullhash}
-      -
-        var data 
-        if (file.metadata.subject){
-          try {
-            JSON.parse(file.metadata.subject)
-          } catch {
-            JSON.parse(file.metadata.subject.replace("name", '"name"').replace("mimetype", '"mimetype"').replace('md5', '"md5"'))
-          }
+    -
+      var data 
+      if (file.metadata.subject){
+        try {
+          data = JSON.parse(file.metadata.subject)
+          delete data.name
+        } catch {
+          data = false
         }
-      if data
-        if data.mimetype
-          li MIME Type: #{data.mimetype}
-        if data.md5
-          li MD5: #{data.md5}
+      }
+    if data
+      h2 Extended Attributes
+      ul
+        each key in Object.keys({...data})
+          li 
+            code #{key}: #{data[key]}
     h2 Revisions
     ul
       for rev in file.hashes

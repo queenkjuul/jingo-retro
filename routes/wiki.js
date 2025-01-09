@@ -7,6 +7,7 @@ const corsEnabler = require('../lib/cors-enabler')
 const app = require('../lib/app').getInstance()
 const _ = require('lodash')
 const { formatBytes } = require('../lib/tools')
+const fs = require('fs')
 
 const proxyPath = app.locals.config.getProxyPath()
 
@@ -89,18 +90,54 @@ function _getWiki(req, res) {
 }
 
 async function _getWikiObject(req, res) {
+  function render(file) {
+    res.locals.file = file
+    res.locals.formatBytes = formatBytes
+    res.render('file')
+  }
+
+  var file = null
   var page = new models.Page(req.params.page, req.params.version)
+
   if (page.exists()) {
     _getWikiPage(req, res, page)
     return
   }
+
   page = null
-  var file = new models.File(req.params.page)
+  file = new models.File(req.params.page)
+
+  // :page could be a filename, but it could also be the first segment in a path to a filename
+  if (fs.existsSync(file.pathname) && fs.statSync(file.pathname).isDirectory()) {
+    const splitUrl = req.url.split('/')
+    const filename = splitUrl[splitUrl.length - 1]
+    file = new models.File(filename)
+  }
+
   if (file.exists()) {
     await file.fetch(true)
-    res.locals.file = file
-    res.locals.formatBytes = formatBytes
-    res.render('file')
+    render(file)
+  } else {
+    // see if we can locate the file by name
+    // TODO: if we find multiple files (same filename in mulitple dirs), redirect to search results
+    const found = await new models.Files().fetch(file.name)
+    const dir = found.replace('files', '').replace(file.name, '')
+
+    file = new models.File(file.name, dir)
+
+    if (file.exists()) {
+      await file.fetch(true)
+      render(file)
+    } else {
+      file = null
+    }
+  }
+
+  if (!page && (!file || !file.exists())) {
+    res.locals.title = '404 - File Not Found'
+    res.statusCode = 404
+    res.render('404.pug')
+    return
   }
 }
 
