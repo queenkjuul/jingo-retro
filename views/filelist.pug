@@ -32,4 +32,4 @@ block content
             td #{new Date(file.stat.mtimeMs).toLocaleString()}
             td
               unless file.stat.isDirectory()
-                a(href=`/wiki/${file.name}`) File Details
+                a(href=`/wiki/${directory ? directory.replace('/files/','') : ''}${namer.wikify(file.name)}`) File Details
