@@ -95,6 +95,11 @@ async function _getWikiObject(req, res) {
     res.locals.formatBytes = formatBytes
     res.render('file')
   }
+  function lost() {
+    res.locals.title = '404 - File Not Found'
+    res.statusCode = 404
+    res.render('404.pug')
+  }
 
   var file = null
   var page = new models.Page(req.params.page, req.params.version)
@@ -121,6 +126,10 @@ async function _getWikiObject(req, res) {
     // see if we can locate the file by name
     // TODO: if we find multiple files (same filename in mulitple dirs), redirect to search results
     const found = await new models.Files().fetch(file.name)
+    if (!found || !found.exists()) {
+      lost()
+      return
+    }
     const dir = found.replace('files', '').replace(file.name, '')
 
     file = new models.File(file.name, dir)
@@ -129,14 +138,16 @@ async function _getWikiObject(req, res) {
       await file.fetch(true)
       render(file)
     } else {
-      file = null
+      if (!file.rawName.includes('.md')) {
+        console.log(file.rawName)
+        res.redirect('/pages/new/' + file.rawName)
+        return
+      }
     }
   }
 
   if (!page && (!file || !file.exists())) {
-    res.locals.title = '404 - File Not Found'
-    res.statusCode = 404
-    res.render('404.pug')
+    lost()
     return
   }
 }
@@ -179,9 +190,7 @@ function _getWikiPage(req, res, page) {
             title: 'Welcome to ' + app.locals.config.get('application').title,
           })
         } else {
-          res.locals.title = '404 - Not found'
-          res.statusCode = 404
-          res.render('404.pug')
+          lost()
           return
         }
       }

@@ -1,10 +1,10 @@
 # Jinji
 
-A **git based** _wiki engine_ written for **node.js**, forked from [Jingo](https://github.com/claudioc/jingo) (Jinji means Jinji Is Not Jingo). Jinji aims to provide a feature-complete wiki platform with truly universal compatibility, targeting Internet Explorer 4 as a baseline browser target.
+Jinji is a **git based** _wiki engine_ written for **node.js**, forked from [Jingo](https://github.com/claudioc/jingo). [Jingo means Jingo Is Not GOllum](https://github.com/gollum/gollum), whereas **Jinji means Jinji Is Not Jingo.** Jinji aims to provide a feature-complete wiki platform with truly universal compatibility, targeting Internet Explorer 4 for Windows as a baseline browser target. IE for Mac is usable but ugly; Netscape 3 for Windows is fully functional but largely unstyled.
 
-Jinji does not follow previous Jingo defaults, and will not respect "legacy" Jingo configurations. This is best to use only with a brand new installation. References to older versions of Jingo in the code may be misleading, as some vestigial code may not yet have been removed, but is likely overridden elsewhere.
+Do not upgrade from Jingo to Jinji. Jinji does not plan to respect Jingo's backwards-compatibility or existing configurations. If there is interest in backporting my '"'modernizations'"' of Jingo back to the old codebase, please open an [Issue](https://github.com/queenkjuul/jinji/issues/new/choose) and let me know; most of the dependency-specific changes can be easily backported.
 
-All libraries have been updated to their latest versions, with requisite refactoring to account for breaking changes. Tests have been modified to reflect new behaviors.
+**Jinji is BETA SOFTWARE. All features deviating from Jingo are experimental and incomplete. It works stably _for my specific use case_, but it is not '"'production ready'"'**
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024412/f0cb9206-37d0-11e7-9748-8101fc4e662f.png)
 
@@ -64,7 +64,11 @@ For code syntax highlighting, jinji uses the `node-syntaxhighlighter` module. Fo
 
 ![Screenshot](https://cloud.githubusercontent.com/assets/166692/26024414/f8470cb8-37d0-11e7-9c96-5193aca12591.png)
 
-## Installation **Not Currently Working with Jinji**
+## Installation 
+
+### THESE INSTRUCTIONS DO NOT CURRENTLY WORK WITH JINGO
+
+_you must clone the repo, run `npm i` in the root, and run `npm run start-dev` to use Jingo, for now_
 
 `npm install -g jingo` or download/clone the whole thing and run `npm install`.
 
