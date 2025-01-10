@@ -13,7 +13,9 @@ block content
   #js--content.show
     +errors()
     h1 Upload File #{path && 'to /files' + path}
-
+    p Be patient when uploading large files; you will be redirected when upload is complete
+    p "File Details" pages for filenames with special symbols may not render correctly.
+    p Filenames may not contain slashes
     form(action=`${proxyPath}/upload${path || ''}`, method='post', encType="multipart/form-data")
       input(type="file", name="file")
       br
