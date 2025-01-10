@@ -1,0 +1,53 @@
+extends layout
+
+include mixins/form
+include mixins/links
+
+block styles
+  +featuresStylesheets()
+
+block tools
+  +tools('file', file.name)
+
+block content
+  #js--content.show
+    +errors()
+    h1 #{file.name}
+    p Download: 
+      a(href=file.urlFor('download')) #{file.urlFor('download')}
+    h2 Info 
+      small 
+        |(#{file.metadata.hash})
+    ul
+      li Size: #{formatBytes(file.content.size)}&nbsp;
+        small
+          |(#{file.content.size.toLocaleString()} B)
+      li Uploaded by: #{file.metadata.author}
+        small &lt;#{file.metadata.email}&gt;
+      li Date: #{file.metadata.date}&nbsp;
+        small
+          |(#{file.metadata.relDate})
+      li Commit: #{file.metadata.fullhash}
+    -
+      var data 
+      if (file.metadata.subject){
+        try {
+          data = JSON.parse(file.metadata.subject)
+          delete data.name
+        } catch {
+          data = false
+        }
+      }
+    if data
+      h2 Extended Attributes
+      ul
+        each key in Object.keys({...data})
+          li 
+            code #{key}: #{data[key]}
+    h2 Revisions
+    ul
+      for rev in file.hashes
+        li 
+          a(href=`${file.urlForShow()}/${rev}`) #{rev}
+            if rev == file.metadata.hash
+              |&nbsp;(current)

@@ -66,6 +66,7 @@
     "pug": "^3.0.3",
     "semver": "^7.6.3",
     "serve-favicon": "^2.5.0",
+    "serve-index": "^1.9.1",
     "transliteration": "^2.3.5"
   },
   "devDependencies": {

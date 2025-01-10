@@ -1,0 +1,35 @@
+extends layout
+
+include mixins/form
+
+block styles
+  +featuresStylesheets()
+
+block tools
+  +tools('file', directory, url)
+
+block content
+  #js--content.show
+    h1.filelist-header File list for #{directory}
+    table.table
+      thead.thead-dark
+        tr
+          td(width=40)
+          td Filename
+          td Size
+          td Modified
+          td
+      tbody.tbody
+        each file in fileList
+          tr
+            td(width=40)
+              img(src=`${file.stat.isDirectory() ? '/img/directory.png' : getIconForFilename(file.name)}`, width=24)
+            td
+              a(href=`${directory}${file.name}`) #{file.name}
+                if file.stat.isDirectory() && file.name !== ".."
+                  small  (directory)
+            td #{formatBytes(file.stat.size)} 
+            td #{new Date(file.stat.mtimeMs).toLocaleString()}
+            td
+              unless file.stat.isDirectory()
+                a(href=`/wiki/${directory ? directory.replace('/files/','') : ''}${namer.wikify(file.name)}`) File Details

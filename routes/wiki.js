@@ -1,25 +1,40 @@
 /* global Git */
 
-var router = require('express').Router()
-var renderer = require('../lib/renderer')
-var models = require('../lib/models/models')
-var corsEnabler = require('../lib/cors-enabler')
-var app = require('../lib/app').getInstance()
+const router = require('express-promise-router')()
+const renderer = require('../lib/renderer')
+const models = require('../lib/models/models')
+const corsEnabler = require('../lib/cors-enabler')
+const app = require('../lib/app').getInstance()
+const _ = require('lodash')
+const { formatBytes } = require('../lib/tools')
+const fs = require('fs')
 
-var proxyPath = app.locals.config.getProxyPath()
+const proxyPath = app.locals.config.getProxyPath()
 
 models.use(Git)
 
 router.get('/', _getIndex)
 router.get('/wiki', _getWiki)
 router.options('/wiki/:page', corsEnabler)
-router.get('/wiki/:page', corsEnabler, _getWikiPage)
+router.get('/wiki/:page', corsEnabler, _getWikiObject)
 router.get('/wiki/:page/history', _getHistory)
-router.get('/wiki/:page/:version', _getWikiPage)
+router.get('/wiki/:page/:version', _getWikiObject)
 router.get('/wiki/:page/compare/:revisions', _getCompare)
 
 function _getHistory(req, res) {
   var page = new models.Page(req.params.page)
+
+  if (!page.exists()) {
+    var file = new models.File(req.params.page)
+    if (file.exists()) {
+      res.redirect(file.urlForShow())
+    } else {
+      res.locals.title = '404 – Not found'
+      res.statusCode = 404
+      res.render('404.pug')
+      return
+    }
+  }
 
   page
     .fetch()
@@ -74,8 +89,60 @@ function _getWiki(req, res) {
     })
 }
 
-function _getWikiPage(req, res) {
+async function _getWikiObject(req, res) {
+  function render(file) {
+    res.locals.file = file
+    res.locals.formatBytes = formatBytes
+    res.render('file')
+  }
+
+  var file = null
   var page = new models.Page(req.params.page, req.params.version)
+
+  if (page.exists()) {
+    _getWikiPage(req, res, page)
+    return
+  }
+
+  page = null
+  file = new models.File(req.params.page)
+
+  // :page could be a filename, but it could also be the first segment in a path to a filename
+  if (fs.existsSync(file.pathname) && fs.statSync(file.pathname).isDirectory()) {
+    const splitUrl = req.url.split('/')
+    const filename = splitUrl[splitUrl.length - 1]
+    file = new models.File(filename)
+  }
+
+  if (file.exists()) {
+    await file.fetch(true)
+    render(file)
+  } else {
+    // see if we can locate the file by name
+    // TODO: if we find multiple files (same filename in mulitple dirs), redirect to search results
+    const found = await new models.Files().fetch(file.name)
+    const dir = found.replace('files', '').replace(file.name, '')
+
+    file = new models.File(file.name, dir)
+
+    if (file.exists()) {
+      await file.fetch(true)
+      render(file)
+    } else {
+      file = null
+    }
+  }
+
+  if (!page && (!file || !file.exists())) {
+    res.locals.title = '404 - File Not Found'
+    res.statusCode = 404
+    res.render('404.pug')
+    return
+  }
+}
+
+function _getWikiPage(req, res, page) {
+  page = page || new models.Page(req.params.page, req.params.version)
 
   page.fetch().then(function () {
     if (!page.error) {
